@@ -4,6 +4,7 @@
 ```
    apt install git
    apt install ansible
+   apt install zip
 ```
 4. Pobieramy repozytorium, **Hasło do archiwum to hasło do roota na 176.119.46.109**
 ```
@@ -23,6 +24,7 @@
 ```
    apt install git
    apt install ansible
+   apt install zip
 ```
 10. Pobieramy repozytorium:
 ```
