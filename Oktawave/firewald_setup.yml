@@ -1,0 +1,48 @@
+---
+- name: Konfiguracja Firewalld do otwaria tylko używanych portów
+  hosts: all
+
+  vars:
+    allowed_tcp_ports:
+      - 22    # SSH
+      - 53    # DNS (TCP)
+      - 80    # HTTP
+      - 3306  # MariaDB
+      - 25    # master
+
+    allowed_udp_ports:
+      - 53    # DNS (UDP)
+      - 123   # NTP
+      - 68    # dhclient
+  tasks:
+
+    - name: Instalacja Firewalld
+      package:
+        name: firewalld
+        state: present
+
+    - name: Uruchomienie i włączenie Firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Zezwolenie na określone porty TCP w strefie publicznej
+      firewalld:
+        port: "{{ item }}/tcp"
+        zone: public
+        state: enabled
+        permanent: yes
+      loop: "{{ allowed_tcp_ports }}"
+
+    - name: Zezwolenie na określone porty UDP w strefie publicznej
+      firewalld:
+        port: "{{ item }}/udp"
+        zone: public
+        state: enabled
+        permanent: yes
+      loop: "{{ allowed_udp_ports }}"
+
+    - name: Zastosowanie zmian w Firewalld
+      command: firewall-cmd --reload
+      # Usunięto args: warn: false

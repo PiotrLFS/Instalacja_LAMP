@@ -1,0 +1,25 @@
+- name: install LAMP Stack
+  hosts: all
+  remote_user: root
+  gather_facts: true
+  vars_files:
+    - secrets.yml
+
+- name: Add etc hosts
+  import_playbook: hosts_add.yml
+
+- name: Include MySQL
+  import_playbook: mysql.yml
+
+- name: Install Apache
+  import_playbook: apache.yml
+
+- name: Install Wordpress
+  import_playbook: wordpress.yml
+
+- name: Disable services
+  import_playbook: disable_services.yml
+
+- name: Firewall rules
+  import_playbook: firewald_setup.yml
+

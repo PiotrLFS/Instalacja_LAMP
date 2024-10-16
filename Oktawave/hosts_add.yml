@@ -1,0 +1,17 @@
+---
+- name: Dodawanie wpisów do /etc/hosts za pomocą lineinfile
+  hosts: all
+
+  vars:
+    hosts_entries:
+      - "176.119.46.109 195178-1-c14bfc-01.services.oktawave.com"
+      - "176.119.46.50 195179-1-56408b-01.services.oktawave.com"
+
+  tasks:
+    - name: Dodaj adresy Oktawave do /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item }}"
+        state: present
+        backup: yes
+      loop: "{{ hosts_entries }}"

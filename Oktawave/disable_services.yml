@@ -1,0 +1,45 @@
+---
+- name: Wyłączanie nieużywanych usług na serwerze LAMP
+  hosts: all
+
+  vars:
+    services_to_disable:
+      - bluetooth
+      - cups
+      - ModemManager
+      - avahi-daemon
+      - telnet
+      - tomcat
+
+  tasks:
+    - name: Wyłączanie nieużywanych usług
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+      loop: "{{ services_to_disable }}"
+      ignore_errors: yes  # Ignoruje błędy, jeśli usługa nie istnieje
+
+    - name: Usuwanie pakietów niepotrzebnych usług (opcjonalnie)
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: yes
+      loop:
+        - bluetooth
+        - cups
+        - modemmanager
+        - avahi-daemon
+        - telnet
+        - tomcat
+      ignore_errors: yes  # Ignoruje błędy, jeśli pakiet nie jest zainstalowany
+
+    - name: Wyłączenie IPv6 (opcjonalnie)
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: yes
+      loop:
+        - { name: "net.ipv6.conf.all.disable_ipv6", value: "1" }
+        - { name: "net.ipv6.conf.default.disable_ipv6", value: "1" }

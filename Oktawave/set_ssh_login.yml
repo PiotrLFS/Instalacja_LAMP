@@ -1,0 +1,41 @@
+---
+- name: Konfiguracja SSH na localhost
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+
+  vars:
+    sshd_config_path: /etc/ssh/sshd_config
+    ssh_service_name: ssh  # Nazwa usługi SSH w Debianie
+
+  tasks:
+    - name: Tworzenie kopii zapasowej pliku sshd_config
+      copy:
+        src: "{{ sshd_config_path }}"
+        dest: "{{ sshd_config_path }}.bak"
+        backup: yes
+      tags: backup
+
+    - name: Ustawienie PermitRootLogin na yes
+      lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: '^#?PermitRootLogin\s+'
+        line: 'PermitRootLogin yes'
+        state: present
+        validate: '/usr/sbin/sshd -t -f %s'
+      notify: Restart SSH
+
+    - name: Ustawienie PasswordAuthentication na yes
+      lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: '^#?PasswordAuthentication\s+'
+        line: 'PasswordAuthentication yes'
+        state: present
+        validate: '/usr/sbin/sshd -t -f %s'
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: "{{ ssh_service_name }}"
+        state: restarted

@@ -1,0 +1,5 @@
+[webservers]
+195178-1-c14bfc-01.services.oktawave.com ansible_host=176.119.46.109 ansible_user=root ansible_ssh_pass=cOoW62PLbJV9OixL
+
+[dbservers]
+195179-1-56408b-01.services.oktawave.com ansible_host=176.119.46.50 ansible_user=root ansible_ssh_pass=8BSTMYBXiK8xKReC
