@@ -62,3 +62,7 @@ DB - 176.119.46.50
 |secrets.yml | Przechowuje hasła instalacyjne|
 |set_ssh_login.yml | Ustawia wymagane do podczas instalacji PermitRootLogin na yes oraz PasswordAuthentication na yes|
 |wordpress.yml | Instaluje Wordpress'a|
+
+Nie udało się zrobić replikacji, wewnętrznie ręcznie się udało ale musiałbym to opakować w ansible. 
+
+Z rzeczy do poprawy to uruchomienie skryptu przez usera z uprawnieniami sudo zamiast root. Nie chciałem odciąć sobie dostępu także ruch nie filtruje adresów IP.
